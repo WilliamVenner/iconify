@@ -19,7 +19,10 @@ function pngExtension(fileName) {
 function recolorSVG(svg, color) {
 	for (let i = 0; i < svg.children.length; i++) {
 		const child = svg.children[i];
-		if (typeof child.isPointInFill === 'function') child.setAttribute('fill', color);
+		if (typeof child.isPointInFill === 'function') {
+			child.setAttribute('fill', color);
+			child.style.fill = null;
+		}
 		recolorSVG(child, color);
 	}
 }
