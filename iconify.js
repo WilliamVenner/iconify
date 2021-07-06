@@ -28,11 +28,11 @@ function render(file, width, height, color, manifest) {
 
 			// Render the SVG
 			document.body.appendChild(svg);
-
-			// Fit the SVG
-			const bbox = svg.getBBox();
-			svg.setAttribute('viewBox', `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`);
 			
+			// Fit the SVG
+			var bbox = svg.getBBox();
+			svg.setAttribute('viewBox', `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`);
+
 			if (width) svg.setAttribute('width', width);
 			if (height) svg.setAttribute('height', height);
 
@@ -43,13 +43,32 @@ function render(file, width, height, color, manifest) {
 			canvas.style.height = canvas.height + 'px';
 
 			// Add to manifest
-			if (manifest) manifest[pngExtension(file.name)] = {
-				color,
-				width: canvas.width,
-				height: canvas.height,
-				left: canvas.width - bbox.width,
-				top: canvas.height - bbox.height
-			};
+			if (manifest) {
+				var bbox = svg.getBBox();
+				const ctm = svg.getCTM();
+
+				let xy = svg.createSVGPoint();
+				xy.x = bbox.x;
+				xy.y = bbox.y;
+				xy = xy.matrixTransform(ctm);
+
+				let wh = svg.createSVGPoint();
+				wh.x = bbox.width;
+				wh.y = bbox.height;
+				wh = wh.matrixTransform(ctm);
+
+				manifest[pngExtension(file.name)] = {
+					color,
+					width: canvas.width,
+					height: canvas.height,
+					bbox: {
+						width: wh.x,
+						height: wh.y,
+						left: xy.x,
+						top: xy.y
+					},
+				};
+			}
 
 			// Recolor the SVG
 			if (color) recolorSVG(svg, color);
