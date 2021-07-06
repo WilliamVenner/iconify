@@ -9,8 +9,11 @@ const manifestFormat = document.querySelector('select[name="manifest-format"]');
 const files = document.querySelector('input[type="file"]');
 
 const RE_STRIP_EXTENSION = /^(.*?)(\.[^.]*?)?$/;
+function stripExtension(fileName) {
+	return fileName.replace(RE_STRIP_EXTENSION, '$1');
+}
 function pngExtension(fileName) {
-	return fileName.replace(RE_STRIP_EXTENSION, '$1') + '.png';
+	return stripExtension(fileName) + '.png';
 }
 
 function recolorSVG(svg, color) {
@@ -66,7 +69,7 @@ function render(file, width, height, color, manifest) {
 					top: Math.round(xy.y)
 				};
 
-				manifest[pngExtension(file.name)] = extendedManifest.checked ? {
+				manifest[stripExtension(file.name)] = extendedManifest.checked ? {
 					color,
 					width: Math.round(canvas.width),
 					height: Math.round(canvas.height),
