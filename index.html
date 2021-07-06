@@ -14,12 +14,15 @@
 	</head>
 	<body>
 		<form onsubmit="return iconifySubmit(event)">
-			<input type="file" name="icons" accept=".svg" multiple required/>
-			<br>
 			<table><tbody>
 				<tr>
+					<td colspan="2">
+						<input type="file" name="icons" accept=".svg" multiple required/><br><br>
+					</td>
+				</tr>
+				<tr>
 					<td><label for="color">Color</label></td>
-					<td>
+					<td style="display: flex">
 						<select id="color" name="color" onchange="formUpdate()" onblur="formUpdate()">
 							<option value="">Unchanged</option>
 							<option value="black">Black</option>
@@ -41,9 +44,8 @@
 						<input id="height" type="number" name="height" placeholder="Unchanged" onchange="formUpdate()" onkeydown="formUpdate()" oninput="formUpdate()" onpaste="formUpdate()"/>
 					</td>
 				</tr>
-			</tbody></table>
-			<br>
-			<input type="submit" value="Iconify!"/>
+			</tbody></table><br>
+			<input type="submit" value="Iconify!"/><br><br>
 			<label>
 				<input type="checkbox" name="manifest">
 				With Manifest
