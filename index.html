@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Iconify</title>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600&display=swap" rel="stylesheet">
+
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+	<body>
+		<form onsubmit="return iconifySubmit(event)">
+			<input type="file" name="icons" accept=".svg" multiple required/>
+			<br>
+			<table><tbody>
+				<tr>
+					<td><label for="color">Color</label></td>
+					<td>
+						<select id="color" name="color" onchange="formUpdate()" onblur="formUpdate()">
+							<option value="">Unchanged</option>
+							<option value="black">Black</option>
+							<option value="white">White</option>
+							<option value="custom">Custom...</option>
+						</select>
+						<input id="color" type="color" name="custom-color"/>
+					</td>
+				</tr>
+				<tr>
+					<td><label for="width">Width</label></td>
+					<td>
+						<input id="width" type="number" name="width" placeholder="Unchanged" onchange="formUpdate()" onkeydown="formUpdate()" oninput="formUpdate()" onpaste="formUpdate()"/>
+					</td>
+				</tr>
+				<tr>
+					<td><label for="height">Height</label></td>
+					<td>
+						<input id="height" type="number" name="height" placeholder="Unchanged" onchange="formUpdate()" onkeydown="formUpdate()" oninput="formUpdate()" onpaste="formUpdate()"/>
+					</td>
+				</tr>
+			</tbody></table>
+			<br>
+			<input type="submit" value="Iconify!"/>
+			<label>
+				<input type="checkbox" name="manifest">
+				With Manifest
+			</label>
+		</form>
+
+		<canvas id="render"></canvas>
+
+		<script type="text/javascript" src="base64.js"></script>
+		<script type="text/javascript" src="FileSaver.js/dist/FileSaver.min.js"></script>
+		<script type="text/javascript" src="jszip/dist/jszip.min.js"></script>
+		<script type="text/javascript" src="iconify.js"></script>
+	</body>
+</html>

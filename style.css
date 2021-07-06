@@ -1,0 +1,25 @@
+body, html {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	font-family: 'Inter', sans-serif;
+	font-size: 14px;
+}
+
+body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+canvas#render {
+	top: 0;
+	left: 0;
+	position: absolute;
+	pointer-events: none;
+	display: none;
+}
+
+form > table td {
+	vertical-align: middle;
+}
