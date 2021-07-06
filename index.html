@@ -45,11 +45,25 @@
 					</td>
 				</tr>
 			</tbody></table><br>
-			<input type="submit" value="Iconify!"/><br><br>
 			<label>
 				<input type="checkbox" name="manifest">
 				With Manifest
 			</label>
+			<br>
+			<label>
+				<input type="checkbox" name="extended">
+				Extended Manifest
+			</label>
+			<br>
+			<label style="margin-top:.5em">
+				Format
+				<select name="manifest-format" style="margin-left:.5em">
+					<option value="json">JSON</option>
+					<option value="lua">Lua Table</option>
+				</select>
+			</label>
+			<br><br>
+			<input type="submit" value="Iconify!"/>
 		</form>
 
 		<canvas id="render"></canvas>

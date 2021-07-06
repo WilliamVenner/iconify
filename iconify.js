@@ -4,6 +4,8 @@ const width = document.querySelector('input[name="width"]');
 const colorSelect = document.querySelector('select[name="color"]');
 const customColor = document.querySelector('input[name="custom-color"]');
 const withManifest = document.querySelector('input[name="manifest"]');
+const extendedManifest = document.querySelector('input[name="extended"]');
+const manifestFormat = document.querySelector('select[name="manifest-format"]');
 const files = document.querySelector('input[type="file"]');
 
 const RE_STRIP_EXTENSION = /^(.*?)(\.[^.]*?)?$/;
@@ -57,17 +59,19 @@ function render(file, width, height, color, manifest) {
 				wh.y = bbox.height;
 				wh = wh.matrixTransform(ctm);
 
-				manifest[pngExtension(file.name)] = {
-					color,
-					width: canvas.width,
-					height: canvas.height,
-					bbox: {
-						width: wh.x,
-						height: wh.y,
-						left: xy.x,
-						top: xy.y
-					},
+				var bbox = {
+					width: Math.round(wh.x),
+					height: Math.round(wh.y),
+					left: Math.round(xy.x),
+					top: Math.round(xy.y)
 				};
+
+				manifest[pngExtension(file.name)] = extendedManifest.checked ? {
+					color,
+					width: Math.round(canvas.width),
+					height: Math.round(canvas.height),
+					bbox,
+				} : bbox;
 			}
 
 			// Recolor the SVG
@@ -120,7 +124,7 @@ async function iconifyZIP(files, width, height, color, manifest) {
 		zip.file(pngExtension(file.name), imageData, {base64: true});
 	}
 
-	if (manifest) zip.file('manifest.json', JSON.stringify(manifest));
+	if (manifest) zip.file('manifest.' + manifestFormat.value, stringifyManifest(manifest));
 
 	saveAs(await zip.generateAsync({type: 'blob'}), 'iconify.zip');
 }
@@ -167,4 +171,44 @@ function iconifySubmit(e) {
 		iconifyZIP(files.files, desiredWidth, desiredHeight, color, withManifest.checked ? {} : undefined);
 
 	return false;
+}
+
+function stringifyManifest(manifest) {
+	switch (manifestFormat.value) {
+		case 'json':
+			return JSON.stringify(manifest);
+
+		case 'lua': {
+			function luaKV(tbl) {
+				let lua = '{';
+
+				for (const k in tbl) {
+					const v = tbl[k];
+					switch (typeof v) {
+						case 'object':
+							lua += k + '=' + luaKV(v);
+							break;
+						
+						case 'null':
+						case 'undefined':
+							continue;
+
+						default:
+							lua += k + '=' + v;
+					}
+					lua += ',';
+				}
+				
+				lua = lua.substr(0, lua.length - 1) + '}';
+				return lua;
+			}
+
+			let lua = '{';
+			for (const file in manifest) {
+				lua += '["' + file + '"]=' + luaKV(manifest[file]) + ',';
+			}
+			lua = lua.substr(0, lua.length - 1) + '}';
+			return lua;
+		}
+	}
 }

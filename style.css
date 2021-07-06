@@ -25,6 +25,13 @@ canvas#render {
 form {
 	text-align: center;
 }
+form > table {
+	width: 100%;
+}
+form > table td:nth-child(1) {
+	width: 1px;
+	white-space: nowrap;
+}
 form > table td {
 	vertical-align: middle;
 	text-align: left;
