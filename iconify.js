@@ -199,6 +199,10 @@ function stringifyManifest(manifest) {
 						case 'undefined':
 							continue;
 
+						case 'string':
+							lua += k + '=\"' + v + '\"';
+							break;
+
 						default:
 							lua += k + '=' + v;
 					}
